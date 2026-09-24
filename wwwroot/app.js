@@ -126,4 +126,7 @@ lista.addEventListener("submit", async (evento) => {
   await carregar();
 });
 
+// Avisa o programa que esta aba está aberta (evita abrir abas repetidas)
+new EventSource("/api/presenca");
+
 carregar().catch(() => registrar("Não foi possível conectar ao servidor.", true));

@@ -1,5 +1,5 @@
 using System.Diagnostics;
-using System.Net.Sockets;
+using System.Net.Http.Json;
 using System.Text.RegularExpressions;
 using PhoneForge.Models;
 using PhoneForge.Services;
@@ -7,10 +7,11 @@ using PhoneForge.Services;
 const int Porta = 5180;
 var endereco = $"http://localhost:{Porta}";
 
-// Se o programa já estiver aberto, só abre o navegador de novo
-if (PortaEmUso(Porta))
+// Garante uma única cópia do programa, mesmo com vários cliques seguidos no atalho
+using var instancia = new Mutex(true, "PhoneForge.InstanciaUnica", out var primeiraInstancia);
+if (!primeiraInstancia)
 {
-    AbrirNavegador(endereco);
+    await AtenderNovoClique(endereco);
     return;
 }
 
@@ -26,10 +27,40 @@ builder.Logging.SetMinimumLevel(LogLevel.Warning);
 var arquivoDados = Path.Combine(
     Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "PhoneForge", "dados.json");
 builder.Services.AddSingleton(new SmartphoneRepository(arquivoDados));
+var abas = new AbasAbertas();
 
 var app = builder.Build();
 app.UseDefaultFiles();
 app.UseStaticFiles();
+
+// Cada aba aberta mantém esta conexão; quando a aba fecha, a conexão cai
+app.MapGet("/api/presenca", async (HttpContext contexto) =>
+{
+    contexto.Response.ContentType = "text/event-stream";
+    abas.Entrou();
+    try
+    {
+        await contexto.Response.WriteAsync(": conectado\n\n");
+        await contexto.Response.Body.FlushAsync();
+        await Task.Delay(Timeout.Infinite, contexto.RequestAborted);
+    }
+    catch (OperationCanceledException)
+    {
+    }
+    finally
+    {
+        abas.Saiu();
+    }
+});
+
+var navegadorAbertoEm = DateTime.MinValue;
+
+app.MapGet("/api/abas", () => new
+{
+    abertas = abas.Quantidade,
+    // Nos primeiros segundos o programa ainda está abrindo a própria aba
+    abrindo = DateTime.UtcNow - navegadorAbertoEm < TimeSpan.FromSeconds(15),
+});
 
 app.Lifetime.ApplicationStarted.Register(() =>
 {
@@ -38,6 +69,7 @@ app.Lifetime.ApplicationStarted.Register(() =>
     Console.WriteLine($"Os dados ficam salvos em: {arquivoDados}");
     Console.WriteLine();
     Console.WriteLine("Para encerrar o programa, feche esta janela.");
+    navegadorAbertoEm = DateTime.UtcNow;
     AbrirNavegador(endereco);
 });
 
@@ -117,16 +149,33 @@ static Dictionary<string, string[]> Validar(NovoSmartphone d)
     return erros;
 }
 
-static bool PortaEmUso(int porta)
+// Chamado quando o programa já está aberto e a pessoa clica no atalho de novo
+static async Task AtenderNovoClique(string endereco)
 {
-    try
+    using var http = new HttpClient { Timeout = TimeSpan.FromSeconds(2) };
+
+    // A primeira cópia pode ainda estar carregando; espera ela responder
+    RespostaAbas? situacao = null;
+    for (var tentativa = 0; tentativa < 30 && situacao is null; tentativa++)
     {
-        using var cliente = new TcpClient();
-        return cliente.ConnectAsync("localhost", porta).Wait(300) && cliente.Connected;
+        try
+        {
+            situacao = await http.GetFromJsonAsync<RespostaAbas>($"{endereco}/api/abas");
+        }
+        catch
+        {
+            await Task.Delay(500);
+        }
     }
-    catch
+
+    // O programa acabou de abrir a aba dele: foram só cliques repetidos no atalho
+    if (situacao is null || situacao.Abrindo)
+        return;
+
+    if (situacao.Abertas == 0 || AvisoWindows.Perguntar("PhoneForge",
+            "O PhoneForge já está aberto no seu navegador.\n\nDeseja abrir mais uma aba?"))
     {
-        return false;
+        AbrirNavegador(endereco);
     }
 }
 
@@ -144,3 +193,4 @@ static void AbrirNavegador(string endereco)
 
 record NovoSmartphone(string Marca, string Numero, string Modelo, string Imei, int Memoria);
 record NovoAplicativo(string Nome);
+record RespostaAbas(int Abertas, bool Abrindo);
