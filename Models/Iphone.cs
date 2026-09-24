@@ -1,15 +1,18 @@
-﻿namespace DesafioPOO.Models
+namespace DesafioPOO.Models
 {
     public class Iphone : Smartphone
     {
+        public override string Marca => "Iphone";
+
         public Iphone(string numero, string modelo, string imei, int memoria)
             : base(numero, modelo, imei, memoria)
         {
         }
 
-        public override void InstalarAplicativo(string nome)
+        public override string InstalarAplicativo(string nome)
         {
-            Console.WriteLine($"Instalando o aplicativo {nome} no iPhone pela App Store...");
+            RegistrarAplicativo(nome);
+            return $"Instalando o aplicativo {nome} no iPhone pela App Store...";
         }
     }
 }

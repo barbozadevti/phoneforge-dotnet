@@ -1,15 +1,18 @@
-﻿namespace DesafioPOO.Models
+namespace DesafioPOO.Models
 {
     public class Nokia : Smartphone
     {
+        public override string Marca => "Nokia";
+
         public Nokia(string numero, string modelo, string imei, int memoria)
             : base(numero, modelo, imei, memoria)
         {
         }
 
-        public override void InstalarAplicativo(string nome)
+        public override string InstalarAplicativo(string nome)
         {
-            Console.WriteLine($"Instalando o aplicativo {nome} no Nokia pela loja Nokia Store...");
+            RegistrarAplicativo(nome);
+            return $"Instalando o aplicativo {nome} no Nokia pela loja Nokia Store...";
         }
     }
 }

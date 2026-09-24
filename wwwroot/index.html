@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Central de Smartphones</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>Central de Smartphones</h1>
+    <p>Desafio POO em .NET: uma classe abstrata <code>Smartphone</code> e as marcas <code>Nokia</code> e <code>Iphone</code>.</p>
+  </header>
+
+  <main>
+    <section class="painel">
+      <h2>Cadastrar celular</h2>
+      <form id="form-cadastro" novalidate>
+        <label>Marca
+          <select name="marca" required>
+            <option value="Nokia">Nokia</option>
+            <option value="Iphone">Iphone</option>
+          </select>
+        </label>
+        <label>Modelo
+          <input name="modelo" placeholder="Ex.: Nokia 3310" required>
+        </label>
+        <label>Número
+          <input name="numero" placeholder="Ex.: 11 91234-5678" required>
+        </label>
+        <label>IMEI (15 dígitos)
+          <input name="imei" inputmode="numeric" maxlength="15" placeholder="123456789012345" required>
+        </label>
+        <label>Memória (GB)
+          <input name="memoria" type="number" min="1" value="64" required>
+        </label>
+        <p id="erros-cadastro" class="erro" role="alert"></p>
+        <button type="submit">Cadastrar</button>
+      </form>
+
+      <h2>Registro de atividades</h2>
+      <ol id="log" aria-live="polite"></ol>
+    </section>
+
+    <section>
+      <h2>Celulares cadastrados</h2>
+      <div id="lista" class="lista"></div>
+    </section>
+  </main>
+
+  <template id="tpl-celular">
+    <article class="celular">
+      <div class="tela">
+        <span class="marca"></span>
+        <h3 class="modelo"></h3>
+        <dl>
+          <dt>Número</dt><dd class="numero"></dd>
+          <dt>IMEI</dt><dd class="imei"></dd>
+          <dt>Memória</dt><dd class="memoria"></dd>
+        </dl>
+        <p class="rotulo">Aplicativos</p>
+        <ul class="apps"></ul>
+      </div>
+      <div class="acoes">
+        <button data-acao="ligar">Ligar</button>
+        <button data-acao="receber-ligacao">Receber ligação</button>
+      </div>
+      <form class="form-app">
+        <input name="nome" placeholder="Nome do aplicativo" aria-label="Nome do aplicativo">
+        <button type="submit">Instalar</button>
+      </form>
+      <button class="remover" data-acao="remover">Remover celular</button>
+    </article>
+  </template>
+
+  <script src="app.js"></script>
+</body>
+</html>

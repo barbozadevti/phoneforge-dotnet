@@ -1,0 +1,167 @@
+:root {
+  --fundo: #f3f4f7;
+  --cartao: #ffffff;
+  --texto: #1d2129;
+  --suave: #5e6573;
+  --borda: #dde0e6;
+  --destaque: #5b3fd6;
+  --destaque-texto: #ffffff;
+  --erro: #c0262d;
+  --nokia: #1a4fb5;
+  --iphone: #2b2b2b;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --fundo: #15171c;
+    --cartao: #1f232b;
+    --texto: #e8eaef;
+    --suave: #9aa1ae;
+    --borda: #343a46;
+    --destaque: #8b73ff;
+    --destaque-texto: #111;
+    --erro: #ff6b6b;
+    --nokia: #6f9cff;
+    --iphone: #d6d6d6;
+  }
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: system-ui, "Segoe UI", Roboto, sans-serif;
+  background: var(--fundo);
+  color: var(--texto);
+  line-height: 1.5;
+}
+
+header, main { max-width: 1100px; margin: 0 auto; padding: 0 16px; }
+header { padding-top: 32px; }
+header h1 { margin: 0 0 4px; }
+header p { margin: 0; color: var(--suave); }
+
+main {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 32px;
+  padding-top: 24px;
+  padding-bottom: 48px;
+}
+
+@media (max-width: 760px) {
+  main { grid-template-columns: 1fr; }
+}
+
+h2 { font-size: 1.1rem; margin: 0 0 12px; }
+
+.painel form { display: grid; gap: 12px; margin-bottom: 28px; }
+
+label { display: grid; gap: 4px; font-size: 0.9rem; color: var(--suave); }
+
+input, select, button {
+  font: inherit;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--borda);
+  background: var(--cartao);
+  color: var(--texto);
+}
+
+button {
+  cursor: pointer;
+  background: var(--destaque);
+  color: var(--destaque-texto);
+  border-color: var(--destaque);
+  font-weight: 600;
+}
+
+button:hover { filter: brightness(1.08); }
+button:focus-visible, input:focus-visible, select:focus-visible {
+  outline: 2px solid var(--destaque);
+  outline-offset: 2px;
+}
+
+.erro { color: var(--erro); margin: 0; font-size: 0.9rem; white-space: pre-line; }
+.erro:empty { display: none; }
+
+#log {
+  margin: 0;
+  padding-left: 20px;
+  font-size: 0.85rem;
+  color: var(--suave);
+  max-height: 320px;
+  overflow-y: auto;
+}
+#log li { margin-bottom: 6px; }
+#log li.falha { color: var(--erro); }
+
+.lista {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 20px;
+}
+
+.vazio { color: var(--suave); }
+
+.celular {
+  background: var(--cartao);
+  border: 1px solid var(--borda);
+  border-radius: 28px;
+  padding: 16px;
+  display: grid;
+  gap: 10px;
+}
+
+.tela {
+  border: 1px solid var(--borda);
+  border-radius: 18px;
+  padding: 14px;
+  min-height: 220px;
+}
+
+.marca {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.celular[data-marca="Nokia"] .marca { color: var(--nokia); }
+.celular[data-marca="Iphone"] .marca { color: var(--iphone); }
+
+.modelo { margin: 2px 0 10px; font-size: 1.1rem; }
+
+dl {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 2px 10px;
+  margin: 0 0 10px;
+  font-size: 0.85rem;
+}
+dt { color: var(--suave); }
+dd { margin: 0; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+
+.rotulo { margin: 0 0 4px; font-size: 0.8rem; color: var(--suave); }
+
+.apps { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
+.apps li {
+  font-size: 0.8rem;
+  padding: 2px 8px;
+  border-radius: 999px;
+  border: 1px solid var(--borda);
+}
+.apps li.nenhum { border: none; padding: 0; color: var(--suave); }
+
+.acoes { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.acoes button { font-size: 0.85rem; padding: 8px 6px; }
+
+.form-app { display: grid; grid-template-columns: 1fr auto; gap: 8px; }
+.form-app input { min-width: 0; }
+
+.remover {
+  background: transparent;
+  color: var(--erro);
+  border-color: transparent;
+  font-weight: 500;
+  font-size: 0.85rem;
+}
