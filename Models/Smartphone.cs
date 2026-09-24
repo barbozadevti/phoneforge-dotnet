@@ -1,4 +1,4 @@
-namespace DesafioPOO.Models
+namespace PhoneForge.Models
 {
     public abstract class Smartphone
     {

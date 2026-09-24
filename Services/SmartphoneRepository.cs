@@ -1,6 +1,6 @@
-using DesafioPOO.Models;
+using PhoneForge.Models;
 
-namespace DesafioPOO.Services
+namespace PhoneForge.Services
 {
     // Armazena os celulares em memória (os dados somem ao reiniciar o servidor)
     public class SmartphoneRepository

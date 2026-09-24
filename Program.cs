@@ -1,6 +1,6 @@
 using System.Text.RegularExpressions;
-using DesafioPOO.Models;
-using DesafioPOO.Services;
+using PhoneForge.Models;
+using PhoneForge.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddSingleton<SmartphoneRepository>();
