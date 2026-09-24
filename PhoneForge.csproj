@@ -4,6 +4,8 @@
     <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <ApplicationIcon>phoneforge.ico</ApplicationIcon>
+    <Product>PhoneForge</Product>
   </PropertyGroup>
 
 </Project>

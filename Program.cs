@@ -1,13 +1,45 @@
+using System.Diagnostics;
+using System.Net.Sockets;
 using System.Text.RegularExpressions;
 using PhoneForge.Models;
 using PhoneForge.Services;
 
-var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddSingleton<SmartphoneRepository>();
+const int Porta = 5180;
+var endereco = $"http://localhost:{Porta}";
+
+// Se o programa já estiver aberto, só abre o navegador de novo
+if (PortaEmUso(Porta))
+{
+    AbrirNavegador(endereco);
+    return;
+}
+
+var builder = WebApplication.CreateBuilder(new WebApplicationOptions
+{
+    Args = args,
+    // Permite abrir pelo atalho da área de trabalho, de qualquer pasta
+    ContentRootPath = AppContext.BaseDirectory,
+});
+builder.WebHost.UseUrls(endereco);
+builder.Logging.SetMinimumLevel(LogLevel.Warning);
+
+var arquivoDados = Path.Combine(
+    Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "PhoneForge", "dados.json");
+builder.Services.AddSingleton(new SmartphoneRepository(arquivoDados));
 
 var app = builder.Build();
 app.UseDefaultFiles();
 app.UseStaticFiles();
+
+app.Lifetime.ApplicationStarted.Register(() =>
+{
+    Console.Title = "PhoneForge";
+    Console.WriteLine($"PhoneForge está aberto no navegador: {endereco}");
+    Console.WriteLine($"Os dados ficam salvos em: {arquivoDados}");
+    Console.WriteLine();
+    Console.WriteLine("Para encerrar o programa, feche esta janela.");
+    AbrirNavegador(endereco);
+});
 
 var api = app.MapGroup("/api/smartphones");
 
@@ -83,6 +115,31 @@ static Dictionary<string, string[]> Validar(NovoSmartphone d)
         erros["memoria"] = ["A memória deve ser maior que zero."];
 
     return erros;
+}
+
+static bool PortaEmUso(int porta)
+{
+    try
+    {
+        using var cliente = new TcpClient();
+        return cliente.ConnectAsync("localhost", porta).Wait(300) && cliente.Connected;
+    }
+    catch
+    {
+        return false;
+    }
+}
+
+static void AbrirNavegador(string endereco)
+{
+    try
+    {
+        Process.Start(new ProcessStartInfo(endereco) { UseShellExecute = true });
+    }
+    catch
+    {
+        Console.WriteLine($"Abra no navegador: {endereco}");
+    }
 }
 
 record NovoSmartphone(string Marca, string Numero, string Modelo, string Imei, int Memoria);

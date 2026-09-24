@@ -4,8 +4,8 @@ namespace PhoneForge.Models
     {
         public override string Marca => "Iphone";
 
-        public Iphone(string numero, string modelo, string imei, int memoria)
-            : base(numero, modelo, imei, memoria)
+        public Iphone(string numero, string modelo, string imei, int memoria, Guid? id = null)
+            : base(numero, modelo, imei, memoria, id)
         {
         }
 

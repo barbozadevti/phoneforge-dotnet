@@ -22,11 +22,12 @@ Cada marca nasce do mesmo molde, a classe abstrata `Smartphone`, e define o pró
 
 - **Backend**: API REST com ASP.NET Core Minimal API
 - **Frontend**: HTML, CSS e JavaScript puro, servido pelo próprio backend
-- **Dados**: repositório em memória (os dados reiniciam junto com o servidor)
+- **Dados**: salvos em um arquivo JSON, que é gravado a cada mudança
 
 ```
 Models/        domínio: Smartphone (abstrata), Nokia, Iphone
-Services/      repositório em memória
+Services/      repositório que salva os dados em JSON
+instalar.ps1   instala o programa com atalhos no Windows
 Program.cs     endpoints da API e validações
 wwwroot/       frontend (index.html, style.css, app.js)
 ```
@@ -78,7 +79,19 @@ cd phoneforge-dotnet
 dotnet run
 ```
 
-Depois abra no navegador o endereço que aparecer no terminal (por exemplo, `http://localhost:5000`).
+O navegador abre sozinho em `http://localhost:5180`.
+
+## Instalar como programa no Windows
+
+Para usar o PhoneForge como um programa comum, com atalho na Área de Trabalho e no Menu Iniciar:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File instalar.ps1
+```
+
+Depois é só dar dois cliques no atalho **PhoneForge**. O programa abre no navegador e mostra uma janelinha; para encerrar, feche essa janela.
+
+Os dados ficam salvos em `%LOCALAPPDATA%\PhoneForge\dados.json`, então continuam lá depois de fechar o programa.
 
 ## Versão de console
 

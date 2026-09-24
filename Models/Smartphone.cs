@@ -2,7 +2,7 @@ namespace PhoneForge.Models
 {
     public abstract class Smartphone
     {
-        public Guid Id { get; } = Guid.NewGuid();
+        public Guid Id { get; }
         public string Numero { get; set; }
         private string Modelo { get; set; }
         private string IMEI { get; set; }
@@ -11,8 +11,10 @@ namespace PhoneForge.Models
 
         public abstract string Marca { get; }
 
-        public Smartphone(string numero, string modelo, string imei, int memoria)
+        // O id só é informado ao recarregar um celular já salvo
+        public Smartphone(string numero, string modelo, string imei, int memoria, Guid? id = null)
         {
+            Id = id ?? Guid.NewGuid();
             Numero = numero;
             Modelo = modelo;
             IMEI = imei;
