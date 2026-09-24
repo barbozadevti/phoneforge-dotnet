@@ -1,4 +1,4 @@
-namespace DesafioPOO.Models
+﻿namespace DesafioPOO.Models
 {
     public class Nokia : Smartphone
     {
@@ -7,9 +7,9 @@ namespace DesafioPOO.Models
         {
         }
 
-        public override void InstalarAplicativo(string nomeApp)
+        public override void InstalarAplicativo(string nome)
         {
-            Console.WriteLine($"Instalando o aplicativo {nomeApp} no Nokia pela loja Nokia Store...");
+            Console.WriteLine($"Instalando o aplicativo {nome} no Nokia pela loja Nokia Store...");
         }
     }
 }

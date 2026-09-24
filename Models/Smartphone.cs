@@ -30,6 +30,6 @@ namespace DesafioPOO.Models
             Console.WriteLine($"Modelo: {Modelo} | IMEI: {IMEI} | Memória: {Memoria} GB | Número: {Numero}");
         }
 
-        public abstract void InstalarAplicativo(string nomeApp);
+        public abstract void InstalarAplicativo(string nome);
     }
 }

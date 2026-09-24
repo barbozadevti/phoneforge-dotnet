@@ -1,4 +1,4 @@
-namespace DesafioPOO.Models
+﻿namespace DesafioPOO.Models
 {
     public class Iphone : Smartphone
     {
@@ -7,9 +7,9 @@ namespace DesafioPOO.Models
         {
         }
 
-        public override void InstalarAplicativo(string nomeApp)
+        public override void InstalarAplicativo(string nome)
         {
-            Console.WriteLine($"Instalando o aplicativo {nomeApp} no iPhone pela App Store...");
+            Console.WriteLine($"Instalando o aplicativo {nome} no iPhone pela App Store...");
         }
     }
 }

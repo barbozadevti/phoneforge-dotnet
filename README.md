@@ -13,7 +13,7 @@ Smartphone (abstrata)
 ├── Numero, Modelo, IMEI, Memoria
 ├── Ligar()
 ├── ReceberLigacao()
-└── InstalarAplicativo(nomeApp)  ← abstrato
+└── InstalarAplicativo(nome)  ← abstrato
     ├── Nokia   → instala pela Nokia Store
     └── Iphone  → instala pela App Store
 ```
